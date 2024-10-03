@@ -4,7 +4,7 @@
 #include <string>
 #include <limits>
 #include <vector>
-#include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -38,25 +38,38 @@ int getUserAction() {
     return -1;
 }
 
-void newRecord(State * states, int numStates) {
-    cout << numStates << endl;
+void newRecord(State* &states, int &numStates) {
+    State* STATES_STACK = new State[numStates + 1];
+    for (int i = 0; i < numStates; i++) {
+        STATES_STACK[i] = states[i];
+    }
+
+    State RECORD_STACK;
     cout << "Введите значения для новой записи:" << endl;
     cout << "Название:" << endl;
-    cin >> states[numStates - 1].name;
+    cin.ignore();
+    getline(cin, RECORD_STACK.name);
     cout << "Столица:" << endl;
-    cin >> states[numStates - 1].capital;
+    getline(cin, RECORD_STACK.capital);
     cout << "Форма правления:" << endl;
-    cin >> states[numStates - 1].government;
+    getline(cin, RECORD_STACK.government);
     cout << "Язык:" << endl;
-    cin >> states[numStates - 1].language;
+    getline(cin, RECORD_STACK.language);
     cout << "Религия:" << endl;
-    cin >> states[numStates - 1].religion;
+    getline(cin, RECORD_STACK.religion);
     cout << "Площадь:" << endl;
-    cin >> states[numStates - 1].area;
+    cin >> RECORD_STACK.area;
     cout << "Население:" << endl;
-    cin >> states[numStates - 1].population;
+    cin >> RECORD_STACK.population;
+    cin.ignore();
     cout << "Континент:" << endl;
-    cin >> states[numStates - 1].continent;
+    getline(cin, RECORD_STACK.continent);
+
+    STATES_STACK[numStates] = RECORD_STACK;
+    delete[] states;
+
+    states = STATES_STACK;
+    numStates++;
 }
 
 void readingFromFile(State* states, int numStates, string FILE_PATH) {

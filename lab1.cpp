@@ -31,20 +31,11 @@ int lab1() {
 				break;
 
 			case 3:
-				numStates += 1;
-
-				newStates = new State[numStates];
-				for (int i = 0; i < (numStates - 1); i++) {
-					newStates[i] = states[i];
-				}
-				dataOutput(newStates, numStates-1);
+				newRecord(states, numStates);
+				cout << "chjeck" << endl;
+				dataOutput(states, numStates);
 
 				delete[] states;
-
-				newRecord(newStates, numStates);
-				dataOutput(newStates, numStates);
-
-				delete[] newStates;
 
 				break;
 

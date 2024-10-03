@@ -19,7 +19,7 @@ struct State {
 
 int getStatesCount(string FILE_PATH);
 int getUserAction();
-void newRecord(State* states, int numStates);
+void newRecord(State* &states, int &numStates);
 void readingFromFile(State* states, int numStates, string FILE_PATH);
 void calculationOfAmountOf(State* states, int numStates, string property, string continentCondition);
 void findMaxOf(State* states, int numStates, string property, string languageCondition);
