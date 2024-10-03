@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -19,6 +20,43 @@ int getStatesCount(string FILE_PATH) {
     infile.close();
 
     return COUNT;
+}
+
+int getUserAction() {
+    int action;
+    cout << "Выберите действие:\n"
+        << "1. Рассчитать суммарную площадь и население государств Северной Америки\n"
+        << "2. Вывести на экран название и столицу самого крупного по численности населения испано-язычного государства\n"
+        << "3. Добавить новую структуру\n"
+        << "Ввод: ";
+    cin >> action;
+
+    if ((action <= 3) && (action >= 1)) {
+        return action;
+    }
+    
+    return -1;
+}
+
+void newRecord(State * states, int numStates) {
+    cout << numStates << endl;
+    cout << "Введите значения для новой записи:" << endl;
+    cout << "Название:" << endl;
+    cin >> states[numStates - 1].name;
+    cout << "Столица:" << endl;
+    cin >> states[numStates - 1].capital;
+    cout << "Форма правления:" << endl;
+    cin >> states[numStates - 1].government;
+    cout << "Язык:" << endl;
+    cin >> states[numStates - 1].language;
+    cout << "Религия:" << endl;
+    cin >> states[numStates - 1].religion;
+    cout << "Площадь:" << endl;
+    cin >> states[numStates - 1].area;
+    cout << "Население:" << endl;
+    cin >> states[numStates - 1].population;
+    cout << "Континент:" << endl;
+    cin >> states[numStates - 1].continent;
 }
 
 void readingFromFile(State* states, int numStates, string FILE_PATH) {
@@ -124,6 +162,7 @@ void findMaxOf(State* states, int numStates, string property, string languageCon
 
 void dataOutput(State * states, int numStates) {
     for (int i = 0; i < numStates; ++i) {
+        cout << i << endl;
         cout << "======================" << endl;
         cout << "Название: " << states[i].name << endl;
         cout << "Столица: " << states[i].capital << endl;
