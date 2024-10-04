@@ -43,10 +43,6 @@ int lab1() {
 				cerr << "[ Ошибка ] Некорректный параметр action" << endl;
 		}
 
-		if (states) {
-			delete[] states;
-		}
-
 		return 0;
 	}
 	else {

@@ -175,7 +175,6 @@ void findMaxOf(State* states, int numStates, string property, string languageCon
 
 void dataOutput(State * states, int numStates) {
     for (int i = 0; i < numStates; ++i) {
-        cout << i << endl;
         cout << "======================" << endl;
         cout << "Название: " << states[i].name << endl;
         cout << "Столица: " << states[i].capital << endl;
