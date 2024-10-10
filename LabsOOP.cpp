@@ -1,4 +1,4 @@
-﻿#include "lab1.h"
+﻿#include "lab.h"
 #include <locale.h>
 #include <Windows.h>
 
@@ -8,5 +8,5 @@ int main()
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
-    lab1();
+    lab();
 }

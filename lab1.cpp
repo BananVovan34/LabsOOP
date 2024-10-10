@@ -1,6 +1,6 @@
 #include "states.h"
 
-int lab1() {
+int lab() {
 	const string FILE_PATH = "inputStates.txt";
 
 	int numStates = getStatesCount(FILE_PATH);
