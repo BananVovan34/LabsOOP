@@ -13,40 +13,49 @@ int lab1() {
 
 		dataOutput(states, numStates);
 
-		int action = getUserAction();
+		bool exit = false;
 
-		switch (action) {
+		while (!(exit)) {
+			int action = getUserAction();
+
+			switch (action) {
 			case 1:
 				calculationOfAmountOf(states, numStates, "area", "Северная_Америка");
 				calculationOfAmountOf(states, numStates, "population", "Северная_Америка");
-				delete[] states;
 
 				break;
 
 			case 2:
 				findMaxOf(states, numStates, "area", "Испанский");
 				findMaxOf(states, numStates, "population", "Испанский");
-				delete[] states;
 
 				break;
 
 			case 3:
 				newRecord(states, numStates);
-				cout << "chjeck" << endl;
 				dataOutput(states, numStates);
 
-				delete[] states;
+				break;
+
+			case 4:
+				cout << "[ Система ] Выход из программы...";
+				exit = true;
 
 				break;
 
 			default:
-				cerr << "[ Ошибка ] Некорректный параметр action" << endl;
+				cerr << "\n[ Ошибка ] Некорректный параметр action" << endl << endl;
+			}
+		}
+
+		if (states) {
+			delete[] states;
 		}
 
 		return 0;
 	}
 	else {
-		cerr << "[ Ошибка ] Некорректный параметр numStates " << numStates << endl;
+		cerr << "\n[ Ошибка ] Некорректный параметр numStates " << numStates << endl;
 
 		return 1;
 	}
