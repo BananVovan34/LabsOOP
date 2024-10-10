@@ -1,4 +1,5 @@
 ﻿#include "lab.h"
+#include <stdio.h>
 #include <locale.h>
 #include <Windows.h>
 
@@ -9,4 +10,6 @@ int main()
     SetConsoleOutputCP(1251);
 
     lab();
+
+    return 0;
 }

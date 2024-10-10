@@ -1,62 +1,60 @@
 #include "states.h"
 
 int lab() {
-	const string FILE_PATH = "inputStates.txt";
+    const char* FILE_PATH = "inputStates.txt";
 
-	int numStates = getStatesCount(FILE_PATH);
+    int numStates = getStatesCount(FILE_PATH);
 
-	if (numStates != -1) {
-		State* states = new State[numStates];
-		State* newStates = nullptr;
+    if (numStates != -1) {
+        State* states = (State*)malloc(numStates * sizeof(State));
+        if (states == NULL) {
+            fprintf(stderr, "\n[ Ошибка ] Не удалось выделить память\n");
+            return 1;
+        }
 
-		readingFromFile(states, numStates, FILE_PATH);
+        readingFromFile(states, numStates, FILE_PATH);
 
-		dataOutput(states, numStates);
+        dataOutput(states, numStates);
 
-		bool exit = false;
+        int exit = 0;
 
-		while (!(exit)) {
-			int action = getUserAction();
+        while (!exit) {
+            int action = getUserAction();
 
-			switch (action) {
-			case 1:
-				calculationOfAmountOf(states, numStates, "area", "Северная_Америка");
-				calculationOfAmountOf(states, numStates, "population", "Северная_Америка");
+            switch (action) {
+            case 1:
+                calculationOfAmountOf(states, numStates, "area", "Северная_Америка");
+                calculationOfAmountOf(states, numStates, "population", "Северная_Америка");
+                break;
 
-				break;
+            case 2:
+                findMaxOf(states, numStates, "area", "Испанский");
+                findMaxOf(states, numStates, "population", "Испанский");
+                break;
 
-			case 2:
-				findMaxOf(states, numStates, "area", "Испанский");
-				findMaxOf(states, numStates, "population", "Испанский");
+            case 3:
+                newRecord(&states, &numStates);
+                dataOutput(states, numStates);
+                break;
 
-				break;
+            case 4:
+                printf("[ Система ] Выход из программы...\n");
+                exit = 1;
+                break;
 
-			case 3:
-				newRecord(states, numStates);
-				dataOutput(states, numStates);
+            default:
+                fprintf(stderr, "\n[ Ошибка ] Некорректный параметр action\n\n");
+            }
+        }
 
-				break;
+        if (states) {
+            free(states);
+        }
 
-			case 4:
-				cout << "[ Система ] Выход из программы...";
-				exit = true;
-
-				break;
-
-			default:
-				cerr << "\n[ Ошибка ] Некорректный параметр action" << endl << endl;
-			}
-		}
-
-		if (states) {
-			delete[] states;
-		}
-
-		return 0;
-	}
-	else {
-		cerr << "\n[ Ошибка ] Некорректный параметр numStates " << numStates << endl;
-
-		return 1;
-	}
+        return 0;
+    }
+    else {
+        fprintf(stderr, "\n[ Ошибка ] Некорректный параметр numStates %d\n", numStates);
+        return 1;
+    }
 }
