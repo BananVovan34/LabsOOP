@@ -9,7 +9,7 @@ int lab() {
 		State* states = new State[numStates];
 		State* newStates = nullptr;
 
-		readingFromFile(states, numStates, FILE_PATH);
+		readingFile(states, numStates, FILE_PATH);
 
 		dataOutput(states, numStates);
 
@@ -38,6 +38,12 @@ int lab() {
 				break;
 
 			case 4:
+				deleteRecord(states, numStates);
+				dataOutput(states, numStates);
+
+				break;
+
+			case 5:
 				cout << "[ Система ] Выход из программы...";
 				exit = true;
 
