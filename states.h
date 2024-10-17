@@ -52,17 +52,21 @@ private:
     int countStates;
     State* states;
 public:
+    // Constructor
     listStates(const string FILE_PATH);
 
+    // Methods
     void dataOutput();
     void calculationOfAmountOf(const string property, const string continentCondition);
     void findMaxOf(const string property, const string languageCondition);
     void newRecord();
     void deleteRecord();
 
+    // Destructor
     ~listStates();
 };
 
+// Another Functions
 int getStatesCount(const string FILE_PATH);
 int getUserAction();
 #endif
