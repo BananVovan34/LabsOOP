@@ -43,7 +43,7 @@ public:
     State(const State& STACK);
 
     // Methods
-    void initFromFile(ifstream& infile);
+    bool initFromFile(ifstream& infile);
     void print();
 };
 

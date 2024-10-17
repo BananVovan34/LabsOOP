@@ -78,15 +78,16 @@ void State::print() {
     cout << "| Континент: " << continent << endl;
 }
 
-void State::initFromFile(ifstream& infile) {
-    infile >> name
+bool State::initFromFile(ifstream& infile) {
+    if (infile >> name
         >> capital
         >> government
         >> language
         >> religion
         >> area
         >> population
-        >> continent;
+        >> continent) return true;
+    else false;
 }
 //
 // Another Functions
