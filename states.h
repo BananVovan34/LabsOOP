@@ -47,12 +47,22 @@ public:
     void print();
 };
 
-void dataOutput(State* states, int numStates);
+class listStates {
+private:
+    int countStates;
+    State* states;
+public:
+    listStates(const string FILE_PATH);
+
+    void dataOutput();
+    void calculationOfAmountOf(const string property, const string continentCondition);
+    void findMaxOf(const string property, const string languageCondition);
+    void newRecord();
+    void deleteRecord();
+
+    ~listStates();
+};
+
 int getStatesCount(const string FILE_PATH);
 int getUserAction();
-void readingFile(State* states, int numStates, const string FILE_PATH);
-void newRecord(State*& states, int& numStates);
-void deleteRecord(State*& states, int& numStates);
-void calculationOfAmountOf(State* states, int numStates, const string property, const string continentCondition);
-void findMaxOf(State* states, int numStates, const string property, const string languageCondition);
 #endif

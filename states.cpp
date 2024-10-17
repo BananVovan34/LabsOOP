@@ -7,6 +7,7 @@
 #include <algorithm>
 
 using namespace std;
+// State
 //
 // Getters
 //
@@ -90,11 +91,11 @@ bool State::initFromFile(ifstream& infile) {
     else false;
 }
 //
-// Another Functions
+// listStates Methods
 //
-void newRecord(State*& states, int& numStates) {
-    State* STATES_STACK = new State[numStates + 1];
-    for (int i = 0; i < numStates; i++) {
+void listStates::newRecord() {
+    State* STATES_STACK = new State[countStates + 1];
+    for (int i = 0; i < countStates; i++) {
         STATES_STACK[i] = states[i];
     }
 
@@ -122,17 +123,17 @@ void newRecord(State*& states, int& numStates) {
     cout << "| Континент:" << endl;
     getline(cin, continent);
 
-    STATES_STACK[numStates] = State(name, capital, government, language, religion, area, population, continent);
+    STATES_STACK[countStates] = State(name, capital, government, language, religion, area, population, continent);
     delete[] states;
 
     states = STATES_STACK;
-    numStates++;
+    countStates++;
 }
 
-void deleteRecord(State*& states, int& numStates) {
+void listStates::deleteRecord() {
     int INDEX;
 
-    if (numStates <= 0) {
+    if (countStates <= 0) {
         cerr << "\n[ Ошибка ] В списке объектов всего лишь 1 объект, вы его не можете удалить" << endl;
         return;
     }
@@ -142,28 +143,28 @@ void deleteRecord(State*& states, int& numStates) {
         cin >> INDEX;
         INDEX--;
 
-        if (INDEX < 0 || INDEX >= numStates) {
-            cerr << "\n[ Ошибка ] Неверный индекс для удаления! Выберите индекс в пределах от 1 до " << numStates << endl;
+        if (INDEX < 0 || INDEX >= countStates) {
+            cerr << "\n[ Ошибка ] Неверный индекс для удаления! Выберите индекс в пределах от 1 до " << countStates << endl;
         }
         else break;
     }
 
-    State* STATES_STACK = new State[numStates - 1];
-    for (int i = 0, j = 0; i < numStates; i++) {
+    State* STATES_STACK = new State[countStates - 1];
+    for (int i = 0, j = 0; i < countStates; i++) {
         if (i != INDEX) STATES_STACK[j++] = states[i];
     }
 
     delete[] states;
 
     states = STATES_STACK;
-    numStates--;
+    countStates--;
 }
 
-void calculationOfAmountOf(State* states, int numStates, const string property, const string continentCondition) {
+void listStates::calculationOfAmountOf(const string property, const string continentCondition) {
     if (property == "area") {
         int areaAmount = 0;
 
-        for (int i = 0; i < numStates; i++)
+        for (int i = 0; i < countStates; i++)
         {
             if (continentCondition == states[i].get_continent()) {
                 areaAmount += states[i].get_area();
@@ -175,7 +176,7 @@ void calculationOfAmountOf(State* states, int numStates, const string property, 
     else if (property == "population") {
         long long populationAmount = 0;
 
-        for (int i = 0; i < numStates; i++)
+        for (int i = 0; i < countStates; i++)
         {
             if (continentCondition == states[i].get_continent()) {
                 populationAmount += states[i].get_population();
@@ -189,12 +190,12 @@ void calculationOfAmountOf(State* states, int numStates, const string property, 
     }
 }
 
-void findMaxOf(State* states, int numStates, const string property, const string languageCondition) {
+void listStates::findMaxOf(const string property, const string languageCondition) {
     if (property == "area") {
         int maxIndex = -1;
         int areaMax = 0;
 
-        for (int i = 0; i < numStates; i++)
+        for (int i = 0; i < countStates; i++)
         {
             if ((languageCondition == states[i].get_language()) && (areaMax < states[i].get_area())) {
                 maxIndex = i;
@@ -214,7 +215,7 @@ void findMaxOf(State* states, int numStates, const string property, const string
         int maxIndex = -1;
         long long populationMax = 0;
 
-        for (int i = 0; i < numStates; i++)
+        for (int i = 0; i < countStates; i++)
         {
             if ((languageCondition == states[i].get_language()) && (populationMax < states[i].get_population())) {
                 maxIndex = i;
@@ -235,31 +236,46 @@ void findMaxOf(State* states, int numStates, const string property, const string
     }
 }
 
-void readingFile(State* states, int numStates, const string FILE_PATH) {
-    ifstream infile(FILE_PATH);
-    if (!infile.is_open()) {
-        cerr << "\n\n[ Ошибка ] Ошибка открытия файла!" << endl;
-        return;
+listStates::listStates(const string FILE_PATH) {
+    countStates = getStatesCount(FILE_PATH);
+
+    if (countStates != -1) {
+        states = new State[countStates];
+        
+        ifstream infile(FILE_PATH);
+        if (!infile.is_open()) {
+            cerr << "\n\n[ Ошибка ] Ошибка открытия файла!" << endl;
+            return;
+        }
+
+        infile.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        for (int i = 0; i < countStates; i++) {
+            states[i].initFromFile(infile);
+        }
+
+        infile.close();
     }
-
-    infile.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    for (int i = 0; i < numStates; i++) {
-        states[i].initFromFile(infile);
+    else {
+        cerr << "\n[ Ошибка ] Некорректный параметр numStates " << countStates << endl;
     }
-
-    infile.close();
 }
 
-void dataOutput(State * states, int numStates) {
-    for (int i = 0; i < numStates; ++i) {
+listStates::~listStates() {
+    delete[] states;
+}
+
+void listStates::dataOutput() {
+    for (int i = 0; i < countStates; ++i) {
         cout << "======================" << endl;
         cout << "| Структура №" << i + 1 << endl;
         states[i].print();
         cout << "======================" << endl << endl;
     }
 }
-
+//
+// Another Functions
+//
 int getStatesCount(const string FILE_PATH) {
     ifstream infile(FILE_PATH);
     if (!infile.is_open()) {
