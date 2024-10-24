@@ -8,14 +8,12 @@ int lab() {
 	if (n != -1) {
 		listStates states(FILE_PATH);
 
-		states.dataOutput();
+		cout << states;
 
 		bool exit = false;
 
 		while (!(exit)) {
-			int action = getUserAction();
-
-			switch (action) {
+			switch (getUserAction()) {
 			case 1:
 				states.calculationOfAmountOf("area", "Северная_Америка");
 				states.calculationOfAmountOf("population", "Северная_Америка");
@@ -29,14 +27,14 @@ int lab() {
 				break;
 
 			case 3:
-				states.newRecord();
-				states.dataOutput();
+				newRecord(states);
+				cout << states;
 
 				break;
 
 			case 4:
 				states.deleteRecord();
-				states.dataOutput();
+				cout << states;
 
 				break;
 

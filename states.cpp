@@ -11,14 +11,14 @@ using namespace std;
 //
 // Getters
 //
-string State::get_name() { return name; };
-string State::get_capital() { return capital; };
-string State::get_government() { return government; };
-string State::get_language() { return language; };
-string State::get_religion() { return religion; };
-int State::get_area() { return area; };
-long long State::get_population() { return population; };
-string State::get_continent() { return continent; };
+const string State::get_name() { return name; };
+const string State::get_capital() { return capital; };
+const string State::get_government() { return government; };
+const string State::get_language() { return language; };
+const string State::get_religion() { return religion; };
+const int State::get_area() { return area; };
+const long long State::get_population() { return population; };
+const string State::get_continent() { return continent; };
 //
 // Setters
 //
@@ -65,9 +65,11 @@ State::State(const State& STACK) {
     population = STACK.population;
     continent = STACK.continent;
 }
+
 //
 // Methods
 //
+
 void State::print() {
     cout << "| Название: " << name << endl;
     cout << "| Столица: " << capital << endl;
@@ -88,47 +90,85 @@ bool State::initFromFile(ifstream& infile) {
         >> area
         >> population
         >> continent) return true;
-    else false;
+    else return false;
 }
 //
-// listStates Methods
-//
-void listStates::newRecord() {
-    State* STATES_STACK = new State[countStates + 1];
-    for (int i = 0; i < countStates; i++) {
-        STATES_STACK[i] = states[i];
-    }
+// Operators
+// 
 
+bool State::operator==(const State& other) const {
+    return name == other.name &&
+        capital == other.capital &&
+        government == other.government &&
+        language == other.language &&
+        religion == other.religion &&
+        area == other.area &&
+        population == other.population &&
+        continent == other.continent;
+}
+
+bool State::operator!=(const State& other) const {
+    return name != other.name &&
+        capital != other.capital &&
+        government != other.government &&
+        language != other.language &&
+        religion != other.religion &&
+        area != other.area &&
+        population != other.population &&
+        continent != other.continent;
+}
+
+ostream& operator<<(ostream& os, State& state) {
+    os << "| Название: " << state.get_name() << endl;
+    os << "| Столица: " << state.get_capital() << endl;
+    os << "| Форма правления: " << state.get_government() << endl;
+    os << "| Язык: " << state.get_language() << endl;
+    os << "| Религия: " << state.get_religion() << endl;
+    os << "| Площадь: " << state.get_area() << endl;
+    os << "| Население: " << state.get_population() << endl;
+    os << "| Континент: " << state.get_continent() << endl;
+    return os;
+}
+
+istream& operator>>(istream& is, State& state) {
     string name, capital, government, language, religion, continent;
     int area;
     long long population;
 
     cout << "\n[ Система ] Введите значения для нового объекта:" << endl;
     cout << "| Название:" << endl;
-    cin.ignore();
-    getline(cin, name);
+    is.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(is, name);
     cout << "| Столица:" << endl;
-    getline(cin, capital);
+    getline(is, capital);
     cout << "| Форма правления:" << endl;
-    getline(cin, government);
+    getline(is, government);
     cout << "| Язык:" << endl;
-    getline(cin, language);
+    getline(is, language);
     cout << "| Религия:" << endl;
-    getline(cin, religion);
+    getline(is, religion);
     cout << "| Площадь:" << endl;
-    cin >> area;
+    is >> area;
     cout << "| Население:" << endl;
-    cin >> population;
-    cin.ignore();
+    is >> population;
+    is.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "| Континент:" << endl;
-    getline(cin, continent);
+    getline(is, continent);
 
-    STATES_STACK[countStates] = State(name, capital, government, language, religion, area, population, continent);
-    delete[] states;
+    state = State(name, capital, government, language, religion, area, population, continent);
 
-    states = STATES_STACK;
-    countStates++;
+    return is;
 }
+
+//
+// Getters
+//
+
+const int listStates::get_countStates() { return countStates; };
+
+//
+// listStates Methods
+//
 
 void listStates::deleteRecord() {
     int INDEX;
@@ -265,14 +305,34 @@ listStates::~listStates() {
     delete[] states;
 }
 
-void listStates::dataOutput() {
+//
+// Operators
+// 
+
+listStates& listStates::operator+=(const State& newState) {
+    State* newStatesArray = new State[countStates + 1];
     for (int i = 0; i < countStates; ++i) {
-        cout << "======================" << endl;
-        cout << "| Структура №" << i + 1 << endl;
-        states[i].print();
-        cout << "======================" << endl << endl;
+        newStatesArray[i] = states[i];
     }
+    newStatesArray[countStates] = newState;
+    delete[] states;
+    states = newStatesArray;
+    ++countStates;
+    return *this;
 }
+
+ostream& operator<<(ostream& os, listStates& list) {
+    int ITERATIONS = list.get_countStates();
+    for (int i = 0; i < ITERATIONS; ++i) {
+        os << "======================" << endl;
+        os << "| Структура №" << i + 1 << endl;
+        os << list.states[i];
+        os << "======================" << endl << endl;
+    }
+
+    return os;
+}
+
 //
 // Another Functions
 //
@@ -295,7 +355,7 @@ int getUserAction() {
     cout << "\n[ Система ] Выберите действие:\n"
         << "| 1. Рассчитать суммарную площадь и население государств Северной Америки\n"
         << "| 2. Вывести на экран название и столицу самого крупного по численности населения испано-язычного государства\n"
-        << "| 3. Добавить новый объект из списка\n"
+        << "| 3. Добавить новый объект в список\n"
         << "| 4. Удалить объект из списка\n"
         << "| 5. Выйти из программы\n"
         << "[ Система ] Ввод: ";
@@ -306,4 +366,11 @@ int getUserAction() {
     }
 
     return -1;
+}
+
+void newRecord(listStates& list) {
+    State NEW_RECORD;
+    cin >> NEW_RECORD;
+
+    list += NEW_RECORD;
 }

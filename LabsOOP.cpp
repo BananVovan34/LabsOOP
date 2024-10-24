@@ -9,4 +9,5 @@ int main()
     SetConsoleOutputCP(1251);
 
     lab();
+    return 0;
 }

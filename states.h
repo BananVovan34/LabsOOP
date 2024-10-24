@@ -18,14 +18,14 @@ private:
     string continent;
 public:
     // Getters
-    string get_name();
-    string get_capital();
-    string get_government();
-    string get_language();
-    string get_religion();
-    int get_area();
-    long long get_population();
-    string get_continent();
+    const string get_name();
+    const string get_capital();
+    const string get_government();
+    const string get_language();
+    const string get_religion();
+    const int get_area();
+    const long long get_population();
+    const string get_continent();
 
     // Setters
     void set_name(string VALUE);
@@ -45,6 +45,12 @@ public:
     // Methods
     bool initFromFile(ifstream& infile);
     void print();
+
+    // Operators
+    bool operator==(const State& other) const;
+    bool operator!=(const State& other) const;
+    friend ostream& operator<<(ostream& os, State& state);
+    friend istream& operator>>(istream& is, State& state);
 };
 
 class listStates {
@@ -55,18 +61,25 @@ public:
     // Constructor
     listStates(const string FILE_PATH);
 
+    // Getters
+    const int get_countStates();
+
     // Methods
-    void dataOutput();
     void calculationOfAmountOf(const string property, const string continentCondition);
     void findMaxOf(const string property, const string languageCondition);
-    void newRecord();
+
     void deleteRecord();
 
     // Destructor
     ~listStates();
+
+    // Operators
+    listStates& operator+=(const State& newState);
+    friend ostream& operator<<(ostream& os, listStates& list);
 };
 
 // Another Functions
 int getStatesCount(const string FILE_PATH);
 int getUserAction();
+void newRecord(listStates& list);
 #endif
