@@ -129,10 +129,12 @@
   <ItemGroup>
     <ClCompile Include="lab.cpp" />
     <ClCompile Include="LabsOOP.cpp" />
+    <ClCompile Include="liststates.cpp" />
     <ClCompile Include="states.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lab.h" />
+    <ClInclude Include="liststates.h" />
     <ClInclude Include="states.h" />
   </ItemGroup>
   <ItemGroup>

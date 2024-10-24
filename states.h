@@ -1,6 +1,7 @@
 #pragma once
 #ifndef STATES_H 
 #define STATES_H
+
 #include <iostream>
 #include <string>
 
@@ -44,7 +45,6 @@ public:
 
     // Methods
     bool initFromFile(ifstream& infile);
-    void print();
 
     // Operators
     bool operator==(const State& other) const;
@@ -53,33 +53,7 @@ public:
     friend istream& operator>>(istream& is, State& state);
 };
 
-class listStates {
-private:
-    int countStates;
-    State* states;
-public:
-    // Constructor
-    listStates(const string FILE_PATH);
-
-    // Getters
-    const int get_countStates();
-
-    // Methods
-    void calculationOfAmountOf(const string property, const string continentCondition);
-    void findMaxOf(const string property, const string languageCondition);
-
-    void deleteRecord();
-
-    // Destructor
-    ~listStates();
-
-    // Operators
-    listStates& operator+=(const State& newState);
-    friend ostream& operator<<(ostream& os, listStates& list);
-};
-
 // Another Functions
 int getStatesCount(const string FILE_PATH);
 int getUserAction();
-void newRecord(listStates& list);
 #endif

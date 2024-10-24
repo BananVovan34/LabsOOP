@@ -1,6 +1,7 @@
-﻿#include "lab.h"
-#include <locale.h>
+﻿#include <locale.h>
 #include <Windows.h>
+
+#include "lab.h"
 
 int main()
 {

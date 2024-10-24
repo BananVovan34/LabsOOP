@@ -1,4 +1,5 @@
 #include "states.h"
+#include "liststates.h"
 
 int lab() {
 	const string FILE_PATH = "inputStates.txt";
