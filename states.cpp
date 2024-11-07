@@ -1,4 +1,3 @@
-#include "states.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -6,21 +5,30 @@
 #include <vector>
 #include <algorithm>
 
+#include "states.h"
+#include "liststates.h"
+
 using namespace std;
+
+//
+// State
 //
 // Getters
 //
-string State::get_name() { return name; };
-string State::get_capital() { return capital; };
-string State::get_government() { return government; };
-string State::get_language() { return language; };
-string State::get_religion() { return religion; };
-int State::get_area() { return area; };
-long long State::get_population() { return population; };
-string State::get_continent() { return continent; };
+
+const string State::get_name() { return name; };
+const string State::get_capital() { return capital; };
+const string State::get_government() { return government; };
+const string State::get_language() { return language; };
+const string State::get_religion() { return religion; };
+const int State::get_area() { return area; };
+const long long State::get_population() { return population; };
+const string State::get_continent() { return continent; };
+
 //
 // Setters
 //
+
 void State::set_name(string VALUE) { name = VALUE; };
 void State::set_capital(string VALUE) { capital = VALUE; };
 void State::set_government(string VALUE) { government = VALUE; };
@@ -29,9 +37,11 @@ void State::set_religion(string VALUE) { religion = VALUE; };
 void State::set_area(int VALUE) { area = VALUE; };
 void State::set_population(long long VALUE) { population = VALUE; };
 void State::set_continent(string VALUE) { continent = VALUE; };
+
 //
 // Consructors
 //
+
 State::State() {
     name = "";
     capital = "";
@@ -64,19 +74,10 @@ State::State(const State& STACK) {
     population = STACK.population;
     continent = STACK.continent;
 }
+
 //
 // Methods
 //
-void State::print() {
-    cout << "| Название: " << name << endl;
-    cout << "| Столица: " << capital << endl;
-    cout << "| Форма правления: " << government << endl;
-    cout << "| Язык: " << language << endl;
-    cout << "| Религия: " << religion << endl;
-    cout << "| Площадь: " << area << endl;
-    cout << "| Население: " << population << endl;
-    cout << "| Континент: " << continent << endl;
-}
 
 bool State::initFromFile(ifstream& infile) {
     if (infile >> name
@@ -87,178 +88,80 @@ bool State::initFromFile(ifstream& infile) {
         >> area
         >> population
         >> continent) return true;
-    else false;
+    else return false;
 }
-//
-// Another Functions
-//
-void newRecord(State*& states, int& numStates) {
-    State* STATES_STACK = new State[numStates + 1];
-    for (int i = 0; i < numStates; i++) {
-        STATES_STACK[i] = states[i];
-    }
 
+//
+// Operators
+// 
+
+bool State::operator==(const State& other) const {
+    return name == other.name &&
+        capital == other.capital &&
+        government == other.government &&
+        language == other.language &&
+        religion == other.religion &&
+        area == other.area &&
+        population == other.population &&
+        continent == other.continent;
+}
+
+bool State::operator!=(const State& other) const {
+    return name != other.name &&
+        capital != other.capital &&
+        government != other.government &&
+        language != other.language &&
+        religion != other.religion &&
+        area != other.area &&
+        population != other.population &&
+        continent != other.continent;
+}
+
+ostream& operator<<(ostream& os, State& state) {
+    os << "| Название: " << state.get_name() << endl;
+    os << "| Столица: " << state.get_capital() << endl;
+    os << "| Форма правления: " << state.get_government() << endl;
+    os << "| Язык: " << state.get_language() << endl;
+    os << "| Религия: " << state.get_religion() << endl;
+    os << "| Площадь: " << state.get_area() << endl;
+    os << "| Население: " << state.get_population() << endl;
+    os << "| Континент: " << state.get_continent() << endl;
+    return os;
+}
+
+istream& operator>>(istream& is, State& state) {
     string name, capital, government, language, religion, continent;
     int area;
     long long population;
 
     cout << "\n[ Система ] Введите значения для нового объекта:" << endl;
     cout << "| Название:" << endl;
-    cin.ignore();
-    getline(cin, name);
+    is.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(is, name);
     cout << "| Столица:" << endl;
-    getline(cin, capital);
+    getline(is, capital);
     cout << "| Форма правления:" << endl;
-    getline(cin, government);
+    getline(is, government);
     cout << "| Язык:" << endl;
-    getline(cin, language);
+    getline(is, language);
     cout << "| Религия:" << endl;
-    getline(cin, religion);
+    getline(is, religion);
     cout << "| Площадь:" << endl;
-    cin >> area;
+    is >> area;
     cout << "| Население:" << endl;
-    cin >> population;
-    cin.ignore();
+    is >> population;
+    is.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "| Континент:" << endl;
-    getline(cin, continent);
+    getline(is, continent);
 
-    STATES_STACK[numStates] = State(name, capital, government, language, religion, area, population, continent);
-    delete[] states;
+    state = State(name, capital, government, language, religion, area, population, continent);
 
-    states = STATES_STACK;
-    numStates++;
+    return is;
 }
 
-void deleteRecord(State*& states, int& numStates) {
-    int INDEX;
-
-    if (numStates <= 0) {
-        cerr << "\n[ Ошибка ] В списке объектов всего лишь 1 объект, вы его не можете удалить" << endl;
-        return;
-    }
-
-    while (true) {
-        cout << "\n[ Система ] Введите порядковый номер удаляемого объекта: " << endl;
-        cin >> INDEX;
-        INDEX--;
-
-        if (INDEX < 0 || INDEX >= numStates) {
-            cerr << "\n[ Ошибка ] Неверный индекс для удаления! Выберите индекс в пределах от 1 до " << numStates << endl;
-        }
-        else break;
-    }
-
-    State* STATES_STACK = new State[numStates - 1];
-    for (int i = 0, j = 0; i < numStates; i++) {
-        if (i != INDEX) STATES_STACK[j++] = states[i];
-    }
-
-    delete[] states;
-
-    states = STATES_STACK;
-    numStates--;
-}
-
-void calculationOfAmountOf(State* states, int numStates, const string property, const string continentCondition) {
-    if (property == "area") {
-        int areaAmount = 0;
-
-        for (int i = 0; i < numStates; i++)
-        {
-            if (continentCondition == states[i].get_continent()) {
-                areaAmount += states[i].get_area();
-            }
-        }
-
-        cout << "\n[ Вывод ] Суммарная площадь государств континента " << continentCondition << " равна " << areaAmount << endl;
-    }
-    else if (property == "population") {
-        long long populationAmount = 0;
-
-        for (int i = 0; i < numStates; i++)
-        {
-            if (continentCondition == states[i].get_continent()) {
-                populationAmount += states[i].get_population();
-            }
-        }
-
-        cout << "\n[ Вывод ] Суммарное население государств континента " << continentCondition << " равна " << populationAmount << endl;
-    }
-    else {
-        cerr << "\n\n[ Ошибка ] Некорректный параметр " << property << endl;
-    }
-}
-
-void findMaxOf(State* states, int numStates, const string property, const string languageCondition) {
-    if (property == "area") {
-        int maxIndex = -1;
-        int areaMax = 0;
-
-        for (int i = 0; i < numStates; i++)
-        {
-            if ((languageCondition == states[i].get_language()) && (areaMax < states[i].get_area())) {
-                maxIndex = i;
-                areaMax = states[i].get_area();
-            }
-        }
-
-        if (maxIndex != -1) {
-            cout << "\n[ Вывод ] Самое крупное по площади государство, у которого " << languageCondition
-                << " - государственный язык - " << states[maxIndex].get_name() << ", со столицей " << states[maxIndex].get_capital() << endl;
-        }
-        else {
-            cout << "\n[ Вывод ] Не найдено государств с языком " << languageCondition << endl;
-        }
-    }
-    else if (property == "population") {
-        int maxIndex = -1;
-        long long populationMax = 0;
-
-        for (int i = 0; i < numStates; i++)
-        {
-            if ((languageCondition == states[i].get_language()) && (populationMax < states[i].get_population())) {
-                maxIndex = i;
-                populationMax = states[i].get_population();
-            }
-        }
-
-        if (maxIndex != -1) {
-            cout << "\n[ Вывод ] Самое крупное по численности населения государство, у которого " << languageCondition
-                << " - государственный язык - " << states[maxIndex].get_name() << ", со столицей " << states[maxIndex].get_capital() << endl;
-        }
-        else {
-            cout << "\n[ Вывод ] Не найдено государств с языком " << languageCondition << endl;
-        }
-    }
-    else {
-        cerr << "\n\n[ Ошибка ] Некорректный параметр " << property << endl;
-    }
-}
-
-void readingFile(State* states, int numStates, const string FILE_PATH) {
-    ifstream infile(FILE_PATH);
-    if (!infile.is_open()) {
-        cerr << "\n\n[ Ошибка ] Ошибка открытия файла!" << endl;
-        return;
-    }
-
-    infile.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    for (int i = 0; i < numStates; i++) {
-        states[i].initFromFile(infile);
-    }
-
-    infile.close();
-}
-
-void dataOutput(State * states, int numStates) {
-    for (int i = 0; i < numStates; ++i) {
-        cout << "======================" << endl;
-        cout << "| Структура №" << i + 1 << endl;
-        states[i].print();
-        cout << "======================" << endl << endl;
-    }
-}
+//
+// Another Functions
+//
 
 int getStatesCount(const string FILE_PATH) {
     ifstream infile(FILE_PATH);
@@ -277,11 +180,11 @@ int getStatesCount(const string FILE_PATH) {
 int getUserAction() {
     int action;
     cout << "\n[ Система ] Выберите действие:\n"
-        << "| 1. Рассчитать суммарную площадь и население государств Северной Америки\n"
-        << "| 2. Вывести на экран название и столицу самого крупного по численности населения испано-язычного государства\n"
-        << "| 3. Добавить новый объект из списка\n"
-        << "| 4. Удалить объект из списка\n"
-        << "| 5. Выйти из программы\n"
+        << "| [ 1 ] Рассчитать суммарную площадь и население государств Северной Америки\n"
+        << "| [ 2 ] Вывести на экран название и столицу самого крупного по численности населения испано-язычного государства\n"
+        << "| [ 3 ] Добавить новый объект в список\n"
+        << "| [ 4 ] Удалить объект из списка\n"
+        << "| [ 5 ] Выйти из программы\n"
         << "[ Система ] Ввод: ";
     cin >> action;
 

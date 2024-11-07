@@ -1,50 +1,45 @@
-#include "states.h"
+#include "politobjects.h"
 
 int lab() {
 	const string FILE_PATH = "inputStates.txt";
 
-	int numStates = getStatesCount(FILE_PATH);
+	int n = getStatesCount(FILE_PATH);
 
-	if (numStates != -1) {
-		State* states = new State[numStates];
-		State* newStates = nullptr;
+	if (n != -1) {
+		politObjects states(FILE_PATH);
 
-		readingFile(states, numStates, FILE_PATH);
-
-		dataOutput(states, numStates);
+		cout << states;
 
 		bool exit = false;
 
 		while (!(exit)) {
-			int action = getUserAction();
-
-			switch (action) {
+			switch (getUserAction()) {
 			case 1:
-				calculationOfAmountOf(states, numStates, "area", "Северная_Америка");
-				calculationOfAmountOf(states, numStates, "population", "Северная_Америка");
+				states.calculationOfAmountOf("area", "Северная_Америка");
+				states.calculationOfAmountOf("population", "Северная_Америка");
 
 				break;
 
 			case 2:
-				findMaxOf(states, numStates, "area", "Испанский");
-				findMaxOf(states, numStates, "population", "Испанский");
+				states.findMaxOf("area", "Испанский");
+				states.findMaxOf("population", "Испанский");
 
 				break;
 
 			case 3:
-				newRecord(states, numStates);
-				dataOutput(states, numStates);
+				newRecord(states);
+				cout << states;
 
 				break;
 
 			case 4:
-				deleteRecord(states, numStates);
-				dataOutput(states, numStates);
+				states.deleteRecord();
+				cout << states;
 
 				break;
 
 			case 5:
-				cout << "[ Система ] Выход из программы...";
+				cout << "\n[ Система ] Выход из программы...";
 				exit = true;
 
 				break;
@@ -54,14 +49,12 @@ int lab() {
 			}
 		}
 
-		if (states) {
-			delete[] states;
-		}
+		states.~listStates();
 
 		return 0;
 	}
 	else {
-		cerr << "\n[ Ошибка ] Некорректный параметр numStates " << numStates << endl;
+		cerr << "\n[ Ошибка ] Некорректный параметр количества объектов: " << n << endl;
 
 		return 1;
 	}

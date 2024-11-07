@@ -1,13 +1,14 @@
 #pragma once
 #ifndef STATES_H 
 #define STATES_H
+
 #include <iostream>
 #include <string>
 
 using namespace std;
 
 class State {
-private:
+protected:
     string name;
     string capital;
     string government;
@@ -18,14 +19,14 @@ private:
     string continent;
 public:
     // Getters
-    string get_name();
-    string get_capital();
-    string get_government();
-    string get_language();
-    string get_religion();
-    int get_area();
-    long long get_population();
-    string get_continent();
+    const string get_name();
+    const string get_capital();
+    const string get_government();
+    const string get_language();
+    const string get_religion();
+    const int get_area();
+    const long long get_population();
+    const string get_continent();
 
     // Setters
     void set_name(string VALUE);
@@ -44,15 +45,15 @@ public:
 
     // Methods
     bool initFromFile(ifstream& infile);
-    void print();
+
+    // Operators
+    bool operator==(const State& other) const;
+    bool operator!=(const State& other) const;
+    friend ostream& operator<<(ostream& os, State& state);
+    friend istream& operator>>(istream& is, State& state);
 };
 
-void dataOutput(State* states, int numStates);
+// Another Functions
 int getStatesCount(const string FILE_PATH);
 int getUserAction();
-void readingFile(State* states, int numStates, const string FILE_PATH);
-void newRecord(State*& states, int& numStates);
-void deleteRecord(State*& states, int& numStates);
-void calculationOfAmountOf(State* states, int numStates, const string property, const string continentCondition);
-void findMaxOf(State* states, int numStates, const string property, const string languageCondition);
 #endif
