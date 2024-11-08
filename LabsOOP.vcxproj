@@ -129,18 +129,15 @@
   <ItemGroup>
     <ClCompile Include="lab.cpp" />
     <ClCompile Include="LabsOOP.cpp" />
-    <ClCompile Include="liststates.cpp" />
     <ClCompile Include="politobjects.cpp" />
-    <ClCompile Include="states.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lab.h" />
-    <ClInclude Include="liststates.h" />
     <ClInclude Include="politobjects.h" />
-    <ClInclude Include="states.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="inputStates.txt" />
+    <Text Include="output.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
