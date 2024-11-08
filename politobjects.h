@@ -15,6 +15,7 @@ protected:
     string continent;
 public:
     virtual bool initFromFile(ifstream& infile);
+    virtual ostream& out(ostream& os);
 
     const string get_name();
     const int get_area();
@@ -49,6 +50,8 @@ public:
 
     bool initFromFile(ifstream& infile);
 
+    ostream& out(ostream& os);
+
     bool operator==(const State& other) const;
     bool operator!=(const State& other) const;
     friend ostream& operator<<(ostream& os, State& state);
@@ -72,6 +75,7 @@ public:
     const long long get_budget();
     const bool get_isCapital();
 
+    ostream& out(ostream& os);
     friend ostream& operator<<(ostream& os, State& state);
     friend istream& operator>>(istream& is, State& state);
 };

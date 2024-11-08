@@ -16,6 +16,7 @@ const long long politObject::get_population() { return population; };
 const string politObject::get_continent() { return continent; };
 
 bool politObject::initFromFile(ifstream& infile) { return true; };
+ostream& politObject::out(ostream& os) { return os; };
 
 // City
 const string City::get_state() { return state; };
@@ -52,6 +53,18 @@ City::City(string set_name, bool set_isCapital, string set_state, string set_may
     area = set_area;
     population = set_population;
     continent = set_continent;
+}
+
+ostream& City::out(ostream& os) {
+    os << "\n| Страна: " << name << endl;
+    os << "| Столица: " << boolToString(isCapital) << endl;
+    os << "| Страна: " << state << endl;
+    os << "| Мэр: " << mayor << endl;
+    os << "| Бюджет: " << budget << endl;
+    os << "| Площадь: " << area << endl;
+    os << "| Население: " << population << endl;
+    os << "| Континент: " << continent << endl;
+    return os;
 }
 
 ostream& operator<<(ostream& os, City& city) {
@@ -153,6 +166,18 @@ bool State::operator==(const State& other) const {
 
 bool State::operator!=(const State& other) const {
     return !(*this == other);
+}
+
+ostream& State::out(ostream& os) {
+    os << "\n| Страна: " << name << endl;
+    os << "| Столица: " << capital << endl;
+    os << "| Форма правления: " << government << endl;
+    os << "| Язык: " << language << endl;
+    os << "| Религия: " << religion << endl;
+    os << "| Площадь: " << area << endl;
+    os << "| Население: " << population << endl;
+    os << "| Континент: " << continent << endl;
+    return os;
 }
 
 ostream& operator<<(ostream& os, State& state) {
@@ -462,14 +487,7 @@ ostream& operator<<(ostream& os, politObjects& list) {
         os << "======================" << endl;
         os << "| Объект №" << i + 1 << endl;
         os << "----------------------" << endl;
-        if (typeid(*list.objects[i]) == typeid(State)) {
-            State* TEMP = dynamic_cast<State*>(list.objects[i]);
-            os << *TEMP;
-        }
-        else if (typeid(*list.objects[i]) == typeid(City)) {
-            City* TEMP = dynamic_cast<City*>(list.objects[i]);
-            os << *TEMP;
-        }
+        list.objects[i]->out(os);
         os << "======================" << endl << endl;
     }
 
