@@ -445,6 +445,7 @@ politObjects::~politObjects() {
     }
     objectsCount = 0;
     delete[] objects;
+    objects = nullptr;
 }
 
 politObjects& politObjects::operator+=(const City& newCity) {
